@@ -1,0 +1,472 @@
+
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Arial', sans-serif;
+    overflow: hidden;
+    color: #fff;
+    transition: background 0.5s ease;
+}
+
+/* Theme styles */
+body.space-theme {
+    background: #000;
+}
+
+body.jungle-theme {
+    background: #0B3B0B;
+}
+
+body.neon-theme {
+    background: #0A0E29;
+}
+
+.game-container {
+    position: relative;
+    width: 800px;
+    max-width: 95vw;
+}
+
+canvas {
+    display: block;
+    border-radius: 10px;
+    transition: border-color 0.5s ease, box-shadow 0.5s ease;
+}
+
+/* Canvas theme styles */
+.space-theme canvas {
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #30cfd0;
+    box-shadow: 0 0 20px #30cfd0;
+}
+
+.jungle-theme canvas {
+    background: rgba(5, 50, 5, 0.8);
+    border: 2px solid #64a338;
+    box-shadow: 0 0 20px #64a338;
+}
+
+.neon-theme canvas {
+    background: rgba(10, 14, 41, 0.8);
+    border: 2px solid #FF00FF;
+    box-shadow: 0 0 20px #FF00FF;
+}
+
+.stars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    display: none;
+}
+
+.space-theme .stars {
+    display: block;
+}
+
+.star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle linear infinite;
+}
+
+@keyframes twinkle {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* Leaves animation for jungle theme */
+.leaves {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    display: none;
+}
+
+.jungle-theme .leaves {
+    display: block;
+}
+
+.leaf {
+    position: absolute;
+    background: rgba(100, 163, 56, 0.4);
+    opacity: 0.5;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    0% { 
+        transform: translateY(-10%) rotate(0deg); 
+        opacity: 0;
+    }
+    10% { opacity: 0.5; }
+    90% { opacity: 0.5; }
+    100% { 
+        transform: translateY(110%) rotate(360deg); 
+        opacity: 0;
+    }
+}
+
+/* Neon lights animation for neon theme */
+.neon-lights {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    display: none;
+}
+
+.neon-theme .neon-lights {
+    display: block;
+}
+
+.neon-light {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(10px);
+    opacity: 0.3;
+    animation: glow ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    0% { transform: scale(0.8); opacity: 0.2; }
+    100% { transform: scale(1.2); opacity: 0.4; }
+}
+
+.ui {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    font-size: 18px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.player-info {
+    padding: 5px 10px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    text-align: center;
+    transition: border-color 0.5s ease;
+}
+
+.player-one {
+    border-left: 4px solid #4cc9f0;
+}
+
+.player-two {
+    border-left: 4px solid #f72585;
+}
+
+.player-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+
+.theme-selector {
+    padding: 5px 10px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+}
+
+.theme-selector select {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+    padding: 3px 8px;
+}
+
+.game-over {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s;
+}
+
+.game-over.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.space-theme .game-over h2 {
+    color: #f72585;
+    text-shadow: 0 0 10px #f72585;
+}
+
+.jungle-theme .game-over h2 {
+    color: #FF9500;
+    text-shadow: 0 0 10px #FF9500;
+}
+
+.neon-theme .game-over h2 {
+    color: #00FFFF;
+    text-shadow: 0 0 10px #00FFFF;
+}
+
+.game-over h2 {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+.winner {
+    font-size: 32px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.final-scores {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.final-scores p {
+    font-size: 20px;
+    margin: 5px 0;
+}
+
+.game-over button {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Theme specific buttons */
+.space-theme .game-over button {
+    background: linear-gradient(45deg, #30cfd0, #5b63fe);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(91, 99, 254, 0.5);
+}
+
+.jungle-theme .game-over button {
+    background: linear-gradient(45deg, #64a338, #aacc00);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(100, 163, 56, 0.5);
+}
+
+.neon-theme .game-over button {
+    background: linear-gradient(45deg, #FF00FF, #00FFFF);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+}
+
+.game-over button:hover {
+    transform: scale(1.05);
+}
+
+.space-theme .game-over button:hover {
+    box-shadow: 0 0 15px rgb(91, 99, 254);
+}
+
+.jungle-theme .game-over button:hover {
+    box-shadow: 0 0 15px rgb(100, 163, 56);
+}
+
+.neon-theme .game-over button:hover {
+    box-shadow: 0 0 15px rgb(255, 0, 255);
+}
+
+.start-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 10;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.space-theme .start-screen h1 {
+    color: #30cfd0;
+    text-shadow: 0 0 10px #30cfd0;
+}
+
+.jungle-theme .start-screen h1 {
+    color: #64a338;
+    text-shadow: 0 0 10px #64a338;
+}
+
+.neon-theme .start-screen h1 {
+    color: #FF00FF;
+    text-shadow: 0 0 10px #FF00FF;
+}
+
+.start-screen h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.controls-section {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.player-controls {
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.5);
+    margin: 0 10px;
+}
+
+.player-controls h3 {
+    margin-top: 0;
+}
+
+.theme-preview {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.theme-preview select {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+    padding: 3px 8px;
+}
+
+.start-screen p {
+    color: #fff;
+    font-size: 16px;
+    margin: 5px 0;
+    text-align: center;
+}
+
+/* Theme specific start button */
+.space-theme .start-screen button {
+    background: linear-gradient(45deg, #30cfd0, #5b63fe);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(91, 99, 254, 0.5);
+    margin-top: 20px;
+}
+
+.jungle-theme .start-screen button {
+    background: linear-gradient(45deg, #64a338, #aacc00);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(100, 163, 56, 0.5);
+    margin-top: 20px;
+}
+
+.neon-theme .start-screen button {
+    background: linear-gradient(45deg, #FF00FF, #00FFFF);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+    margin-top: 20px;
+}
+
+.start-screen button:hover {
+    transform: scale(1.05);
+}
+
+.space-theme .start-screen button:hover {
+    box-shadow: 0 0 15px rgb(91, 99, 254);
+}
+
+.jungle-theme .start-screen button:hover {
+    box-shadow: 0 0 15px rgb(100, 163, 56);
+}
+
+.neon-theme .start-screen button:hover {
+    box-shadow: 0 0 15px rgb(255, 0, 255);
+}
+
+@media (max-width: 768px) {
+    .controls-section {
+        flex-direction: column;
+    }
+    
+    .player-controls {
+        margin: 5px 0;
+    }
+    
+    .start-screen h1 {
+        font-size: 32px;
+    }
+    
+    .game-over h2 {
+        font-size: 32px;
+    }
+    
+    .winner {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 600px) {
+    .ui {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .player-info, .theme-selector {
+        margin: 5px 0;
+    }
+}
