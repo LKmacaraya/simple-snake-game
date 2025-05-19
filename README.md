@@ -83,8 +83,6 @@ Theme switching logic
 Score tracking
 Game state management
 
-
-
 Contributing
 Feel free to fork this project and make your own modifications! Some ideas for enhancements:
 
